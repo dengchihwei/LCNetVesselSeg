@@ -316,4 +316,4 @@ if __name__ == '__main__':
     test_rotate_matrices = get_rotation_matrix_3d_batch(test_rotate_angles)
     test_rotated_dirs = torch.matmul(test_rotate_matrices, test_rotated_dirs)
     test_rotated_dirs = test_rotated_dirs.view(4, 3, 48, 48, 48)
-    print(direction_similarity_3d(test_orig_dirs, test_rotated_dirs, test_rotate_angles))
+    print(direction_similarity_3d(test_orig_dirs, test_rotated_dirs, test_rotate_angles, None))

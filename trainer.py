@@ -15,10 +15,9 @@ from datetime import date
 from collections import OrderedDict
 from torch.nn.parallel import DataParallel
 from logger import Logger
-from loss.loss_utils import rotate_3d_batch
 from networks.unet_2d import UNet2D, LocalContrastNet2D
 from networks.unet_3d import UNet3D, LocalContrastNet3D
-from loss.loss_func import vessel_loss, supervised_loss, vessel_loss_ssl
+from loss.loss_func import vessel_loss, supervised_loss
 
 
 class Trainer(object):
@@ -71,23 +70,14 @@ class Trainer(object):
         # start to training
         self.model.train()
         for idx, batch in enumerate(tqdm(self.train_loader, desc=str(epoch_idx), unit='b')):
-            images = batch['image']
-            rotate_angles = batch['rotation_angles']
-            rotated_images = rotate_3d_batch(images, rotate_angles)
-
-            images = images.cuda()
-            rotate_angles = rotate_angles.cuda()
-            rotated_images = rotated_images.cuda()
-
+            images = batch['image'].cuda()
             output = self.model(images)
-            rotated_output = {'vessel': self.model(rotated_images)['vessel']}
+
             # losses from loss function
             if self.trainer_conf['supervision']:
                 labels = batch['label'].cuda()
                 total_loss = self.loss_func(labels, output)
                 batch_losses = {'total_loss': total_loss}
-            elif self.trainer_conf['self-supervised']:
-                batch_losses = self.loss_func(images, output, rotated_output, self.loss_conf, rotate_angles)
             else:
                 batch_losses = self.loss_func(images, output, self.loss_conf)
 
@@ -278,8 +268,6 @@ class Trainer(object):
         """
         if self.configer['trainer']['supervision']:
             loss_func = supervised_loss
-        elif self.configer['trainer']['self-supervised']:
-            loss_func = vessel_loss_ssl
         else:
             loss_func = vessel_loss
         return loss_func

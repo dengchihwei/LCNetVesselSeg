@@ -64,7 +64,7 @@ class Dataset3D(Dataset):
         '''
 
         # get random rotation angles
-        rotation_angles = self.get_random_angle(90, 1.0)
+        rotation_angles = self.get_random_angle(180, 1.0)
 
         # convert to torch types
         image_patch = torch.from_numpy(image_patch.copy()).unsqueeze(0)
