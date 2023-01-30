@@ -1,0 +1,46 @@
+{
+  "name": "MRA_TUBETK",
+  "arch": {
+    "type": "LocalContrastNet3D",
+    "in_channels": 1,
+    "out_channels": 3,
+    "min_scale": 0.5,
+    "max_scale": 10.5,
+    "radius_num": 128,
+    "feature_dims": [64, 128, 256, 512]
+  },
+  "optimizer": {
+    "type": "Adam",
+    "learning_rate": 0.001,
+    "weight_decay": 1e-5,
+    "amsgrad": true
+  },
+  "lr_scheduler": {
+    "type": "StepLR",
+    "step_size": 50,
+    "gamma": 1.0
+  },
+  "loss": {
+    "flux_loss_type": "asymmetry",
+    "lambda_flux": 5,
+    "lambda_direction": 1,
+    "lambda_intensity": 1,
+    "lambda_recon": 1,
+    "lambda_attention": 1,
+    "flux_sample_num": 128,
+    "intensity_sample_num": 32,
+    "grad_dims": [2, 3, 4],
+    "mean_exp": 0.0
+  },
+  "trainer": {
+    "supervision": false,
+    "fine-tune": false,
+    "device": "cuda:0",
+    "train_type": "adaptive_with_lc",
+    "epoch_num": 100,
+    "save_period": 1,
+    "resume": false,
+    "resume_path": "none",
+    "checkpoint_dir": "/ifs/loni/faculty/shi/spectrum/zdeng/MSA_Data/UnsupervisedVesselSeg/trained_models"
+  }
+}
