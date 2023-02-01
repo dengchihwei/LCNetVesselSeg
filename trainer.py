@@ -44,7 +44,8 @@ class Trainer(object):
 
         # get model related attributes
         self.model = self.get_model().cuda()
-        self.model = DataParallel(self.model, device_ids=list(range(self.device_num)))
+        if self.device_num > 1:
+            self.model = DataParallel(self.model, device_ids=list(range(self.device_num)))
         self.opt = self.get_optimizer()
         self.lr_scheduler = self.get_scheduler()
 
@@ -59,13 +60,13 @@ class Trainer(object):
         :return: average_losses, average losses
         """
         n_samples = 0
-        total_batch_loss = torch.zeros(1).cuda()
-        flux_batch_loss = torch.zeros(1).cuda()
-        dirs_batch_loss = torch.zeros(1).cuda()
-        ints_batch_loss = torch.zeros(1).cuda()
-        rcon_batch_loss = torch.zeros(1).cuda()
-        attn_batch_loss = torch.zeros(1).cuda()
-        augment_batch_loss = torch.zeros(1).cuda()
+        total_batch_loss = 0.0
+        flux_batch_loss = 0.0
+        dirs_batch_loss = 0.0
+        ints_batch_loss = 0.0
+        rcon_batch_loss = 0.0
+        attn_batch_loss = 0.0
+        augment_batch_loss = 0.0
 
         # start to training
         self.model.train()
@@ -92,19 +93,19 @@ class Trainer(object):
             # accumulate losses through batches
             curr_batch_len = images.size(0)
             n_samples += curr_batch_len
-            total_batch_loss += batch_losses['total_loss'].detach() * curr_batch_len
+            total_batch_loss += batch_losses['total_loss'].detach().item() * curr_batch_len
             if 'flux_loss' in batch_losses.keys():
-                flux_batch_loss += batch_losses['flux_loss'].detach() * curr_batch_len
+                flux_batch_loss += batch_losses['flux_loss'].detach().item() * curr_batch_len
             if 'dirs_loss' in batch_losses.keys():
-                dirs_batch_loss += batch_losses['dirs_loss'].detach() * curr_batch_len
+                dirs_batch_loss += batch_losses['dirs_loss'].detach().item() * curr_batch_len
             if 'ints_loss' in batch_losses.keys():
-                ints_batch_loss += batch_losses['ints_loss'].detach() * curr_batch_len
+                ints_batch_loss += batch_losses['ints_loss'].detach().item() * curr_batch_len
             if 'rcon_loss' in batch_losses.keys():
-                rcon_batch_loss += batch_losses['rcon_loss'].detach() * curr_batch_len
+                rcon_batch_loss += batch_losses['rcon_loss'].detach().item() * curr_batch_len
             if 'attn_loss' in batch_losses.keys():
-                attn_batch_loss += batch_losses['attn_loss'].detach() * curr_batch_len
+                attn_batch_loss += batch_losses['attn_loss'].detach().item() * curr_batch_len
             if 'augment_loss' in batch_losses.keys():
-                augment_batch_loss += batch_losses['augment_loss'].detach() * curr_batch_len
+                augment_batch_loss += batch_losses['augment_loss'].detach().item() * curr_batch_len
 
         # learning rate decrease
         if self.lr_scheduler is not None:
@@ -112,17 +113,17 @@ class Trainer(object):
 
         # get the loss dicts
         average_losses = {'avg_total_loss': total_batch_loss / n_samples}
-        if torch.is_nonzero(flux_batch_loss):
+        if flux_batch_loss != 0:
             average_losses['avg_flux_loss'] = flux_batch_loss / n_samples
-        if torch.is_nonzero(dirs_batch_loss):
+        if dirs_batch_loss != 0:
             average_losses['avg_dirs_loss'] = dirs_batch_loss / n_samples
-        if torch.is_nonzero(ints_batch_loss):
+        if ints_batch_loss != 0:
             average_losses['avg_ints_loss'] = ints_batch_loss / n_samples
-        if torch.is_nonzero(rcon_batch_loss):
+        if rcon_batch_loss != 0:
             average_losses['avg_rcon_loss'] = rcon_batch_loss / n_samples
-        if torch.is_nonzero(attn_batch_loss):
+        if attn_batch_loss != 0:
             average_losses['avg_attn_loss'] = attn_batch_loss / n_samples
-        if torch.is_nonzero(augment_batch_loss):
+        if augment_batch_loss != 0:
             average_losses['avg_augment_loss'] = augment_batch_loss / n_samples
         return average_losses
 

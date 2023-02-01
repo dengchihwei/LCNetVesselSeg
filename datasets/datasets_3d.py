@@ -72,7 +72,7 @@ class Dataset3D(Dataset):
             'image_id': image_idx,
             'image': image_patch.float(),
             'start_coord': torch.LongTensor(start_coord),
-            'rotation_angles': torch.tensor(rotation_angles)
+            'rotation_angles': torch.from_numpy(rotation_angles.copy())
         }
 
         # only for dataset with dense labels and supervised learning
@@ -302,7 +302,7 @@ def get_data_loader_3d(data_name='TUBETK', split='train', batch_size=1, shuffle=
     """
     data_dir = dataset_paths[data_name]
     dataset = Dataset3D(data_dir, data_name=data_name, split=split)
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, num_workers=2)
     return dataloader
 
 

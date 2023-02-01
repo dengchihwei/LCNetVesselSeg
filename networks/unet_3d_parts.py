@@ -14,7 +14,7 @@ from loss.loss_func import calc_local_contrast
 class SingleConv3d(nn.Module):
     def __init__(self, in_ch, out_ch, size=3, pad=1, act=nn.ELU()):
         super(SingleConv3d, self).__init__()
-        self.conv = nn.Conv3d(in_ch, out_ch, kernel_size=size, padding=pad, bias=False)
+        self.conv = nn.Conv3d(in_ch, out_ch, kernel_size=size, padding=pad, padding_mode='reflect', bias=False)
         self.norm = nn.BatchNorm3d(out_ch)
         self.relu = act
 
