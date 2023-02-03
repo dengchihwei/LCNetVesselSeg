@@ -4,8 +4,8 @@
     "type": "LocalContrastNet3D",
     "in_channels": 1,
     "out_channels": 3,
-    "min_scale": 0.2,
-    "max_scale": 6.5,
+    "min_scale": 0.5,
+    "max_scale": 10.5,
     "radius_num": 128,
     "feature_dims": [64, 128, 256, 512]
   },

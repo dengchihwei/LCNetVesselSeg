@@ -27,10 +27,10 @@ patch_size = 48
 parser = argparse.ArgumentParser()
 parser.add_argument('--method', type=str, default='ours')
 parser.add_argument('--model_path', type=str,
-                    default='../../../trained_models/DARK_LSA/2023-01-29/100-epoch-2023-01-29.pth')
+                    default='../../../trained_models/DARK_LSA/2023-02-02/50-epoch-2023-02-02.pth')
 parser.add_argument('--device', type=str, default='cuda:2')
 parser.add_argument('--type', type=str, default='adaptive_lc')
-parser.add_argument('--split', type=str, default='train')
+parser.add_argument('--split', type=str, default='test')
 
 
 class LCNetFeature3D(LocalContrastNet3D):
