@@ -177,7 +177,7 @@ class Trainer(object):
             'arch': arch,
             'epoch': epoch_idx,
             'configer': self.configer,
-            'model': self.model.module.state_dict(),
+            'model': self.model.module.state_dict() if self.device_num > 1 else self.model.state_dict(),
             'optimizer': self.opt.state_dict(),
             'current_loss': losses['avg_total_loss']
         }
