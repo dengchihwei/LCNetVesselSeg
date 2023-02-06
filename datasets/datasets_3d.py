@@ -209,6 +209,7 @@ class Dataset3D(Dataset):
             image_path = self.image_files[i]
             image_file = SiTk.ReadImage(image_path)
             image = SiTk.GetArrayFromImage(image_file)
+            print(image_path, image.max())
             patch_num_dim = np.ceil((np.array(image.shape) - self.patch_size) / self.spacing + 1).astype(np.int16)
             patch_total_num = np.prod(patch_num_dim)
             self.total_patch_num += patch_total_num
@@ -260,7 +261,7 @@ class Dataset3D(Dataset):
             max_val, min_val = min(255, image.max()), max(-900, image.min())
             image = np.clip(image, a_max=max_val, a_min=min_val)
         elif self.data_name == 'LSA':
-            max_val, min_val = min(255, image.max()), max(0, image.min())
+            max_val, min_val = min(400, image.max()), max(0, image.min())
             image = np.clip(image, a_max=max_val, a_min=min_val)
         else:
             max_val, min_val = image.max(), image.min()

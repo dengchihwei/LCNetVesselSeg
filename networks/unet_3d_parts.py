@@ -86,10 +86,10 @@ class SingleEncoder3d(nn.Module):
 
 
 class SingleDecoder3d(nn.Module):
-    def __init__(self, in_ch, out_ch, size=3, stride=2, pad=1, out_pad=1):
+    def __init__(self, in_ch, out_ch, size=3, stride=2, pad=0, out_pad=0):
         super(SingleDecoder3d, self).__init__()
         self.up_sample = SingleUpSample3d(in_ch-out_ch, in_ch-out_ch, size, stride, pad, out_pad)
-        self.conv = DoubleConv3d(in_ch, out_ch, size, pad)
+        self.conv = DoubleConv3d(in_ch, out_ch, size)
 
     def forward(self, encoder_features, x):
         x = self.up_sample(encoder_features.size()[2:], x)

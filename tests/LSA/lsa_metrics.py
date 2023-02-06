@@ -40,7 +40,7 @@ def get_best_dice_threshold(response, label, thresholds):
         if curr_dice > best_dice:
             best_thresh = thresh
             best_dice = curr_dice
-    # print("Got best dice {:.4f} at threshold {}".format(best_dice, best_thresh))
+    print("Got best dice {:.4f} at threshold {}".format(best_dice, best_thresh))
     return best_thresh
 
 
@@ -53,6 +53,7 @@ def get_metrics(arguments):
     for label_file in tqdm(label_files):
         subject_id = label_file.split('/')[-2]
         response_file = 'LSA_{}_{}/LSA_{}.nii.gz'.format(arguments.method, arguments.split, subject_id)
+        print(response_file)
         response_image, label_image = sitk.ReadImage(response_file), sitk.ReadImage(label_file)
         response, label = sitk.GetArrayFromImage(response_image), sitk.GetArrayFromImage(label_image)
         _, _, thresholds = metrics.roc_curve(label.reshape(-1), response.reshape(-1), pos_label=1)
