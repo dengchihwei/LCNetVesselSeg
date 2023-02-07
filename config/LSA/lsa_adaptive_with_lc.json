@@ -41,8 +41,8 @@
     "train_type": "adaptive_with_lc",
     "epoch_num": 100,
     "save_period": 1,
-    "resume": false,
-    "resume_path": "None",
+    "resume": true,
+    "resume_path": "/ifs/loni/faculty/shi/spectrum/zdeng/MSA_Data/UnsupervisedVesselSeg/trained_models/DARK_LSA/2023-02-06/25-epoch-2023-02-06.pth",
     "checkpoint_dir": "/ifs/loni/faculty/shi/spectrum/zdeng/MSA_Data/UnsupervisedVesselSeg/trained_models"
   }
 }

@@ -26,7 +26,7 @@ patch_size = 48
 parser = argparse.ArgumentParser()
 parser.add_argument('--method', type=str, default='ours')
 parser.add_argument('--model_path', type=str,
-                    default='../../../trained_models/DARK_LSA/2023-02-04/80-epoch-2023-02-04.pth')
+                    default='../../../trained_models/DARK_LSA/2023-02-06/79-epoch-2023-02-06.pth')
 parser.add_argument('--device', type=str, default='cuda:2')
 parser.add_argument('--type', type=str, default='adaptive_lc')
 parser.add_argument('--split', type=str, default='test')

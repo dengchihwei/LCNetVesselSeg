@@ -209,7 +209,6 @@ class Dataset3D(Dataset):
             image_path = self.image_files[i]
             image_file = SiTk.ReadImage(image_path)
             image = SiTk.GetArrayFromImage(image_file)
-            print(image_path, image.max())
             patch_num_dim = np.ceil((np.array(image.shape) - self.patch_size) / self.spacing + 1).astype(np.int16)
             patch_total_num = np.prod(patch_num_dim)
             self.total_patch_num += patch_total_num
